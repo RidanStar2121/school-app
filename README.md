@@ -1,1 +1,241 @@
-# school-app
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تسجيل الدورات</title>
+
+<style>
+body {
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  direction: rtl;
+}
+
+.container {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #4facfe;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #007bff;
+}
+
+.success {
+  display: none;
+  color: green;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* 🎴 بطاقة الطالب */
+#cardContainer {
+  display: none;
+  margin-top: 20px;
+}
+
+.card {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: right;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.card p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  color: #007bff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.signature {
+  margin-top: 10px;
+  font-size: 13px;
+  color: gray;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>📚 تسجيل الدورات</h2>
+
+  <form id="form">
+    <input type="text" id="name" placeholder="👦 اسم الطفل" required>
+    <input type="number" id="age" placeholder="🎂 العمر" required>
+    <input type="text" id="phone" placeholder="📱 رقم الهاتف" required>
+
+    <select id="course">
+      <option>🎮 Scratch</option>
+      <option>🤖 روبوتيك</option>
+      <option>🐍 Python</option>
+      <option>🧠 ذكاء اصطناعي</option>
+    </select>
+
+    <button type="submit">🚀 تسجيل الآن</button>
+  </form>
+
+  <div class="success" id="successMsg"></div>
+
+  <!-- 🎴 بطاقة الطالب -->
+  <div id="cardContainer">
+    <div class="card" id="studentCard">
+      <div class="badge">طالب مسجل</div>
+
+      <h3>📌 أكاديمية وضاح للعلوم</h3>
+      <h3>📌 بطاقة الطالب</h3>
+
+      <p><b>🆔 الرقم:</b> <span id="cardId"></span></p>
+      <p><b>👦 الاسم:</b> <span id="cardName"></span></p>
+      <p><b>🎂 العمر:</b> <span id="cardAge"></span></p>
+      <p><b>📱 الهاتف:</b> <span id="cardPhone"></span></p>
+      <p><b>📚 الدورة:</b> <span id="cardCourse"></span></p>
+      <p><b>📅 تاريخ التسجيل:</b> <span id="cardDate"></span></p>
+      <p><b>👨‍🏫 الأستاذ:</b> نذير وضاح</p>
+    </div>
+
+    <p style="font-size:13px;margin-top:10px;">
+      📌 قم بحفظ البطاقة أو أخذ Screenshot لإحضارها يوم التسجيل
+    </p>
+  </div>
+
+<div style="margin-top:15px; text-align:center;">
+
+  <a href="https://wa.me/213698935571" target="_blank"
+     style="display:inline-block; background:#25D366; color:white;
+     padding:8px 12px; margin:3px; border-radius:8px;
+     text-decoration:none; font-size:12px;">
+     📞 واتساب
+  </a>
+
+  <a href="https://youtube.com/@ouaddahnadir" target="_blank"
+     style="display:inline-block; background:#ff0000; color:white;
+     padding:8px 12px; margin:3px; border-radius:8px;
+     text-decoration:none; font-size:12px;">
+     🎥 يوتيوب
+  </a>
+
+  <a href="https://facebook.com/nadir.ouaddah" target="_blank"
+     style="display:inline-block; background:#1877f2; color:white;
+     padding:8px 12px; margin:3px; border-radius:8px;
+     text-decoration:none; font-size:12px;">
+     👍 فيسبوك
+  </a>
+
+</div>
+
+  <div class="signature">
+    <h4>برمجة وتصميم: نذير وضاح</h4>
+  </div>
+
+</div>
+
+<script>
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  fetch("https://script.google.com/macros/s/AKfycbxTGELHHIGsGQno1bxZmh5JELRm5QturBpEi9NlvyF6aOGSKUUTcDIC0m9KT9K3PeBUPw/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      name: document.getElementById("name").value,
+      age: document.getElementById("age").value,
+      phone: document.getElementById("phone").value,
+      course: document.getElementById("course").value
+    })
+  })
+
+  .then(res => res.text())
+  .then(id => {
+
+    id = id.trim();
+
+    if (!id) throw new Error("Empty ID");
+
+    let name = document.getElementById("name").value;
+    let age = document.getElementById("age").value;
+    let phone = document.getElementById("phone").value;
+    let course = document.getElementById("course").value;
+
+    let today = new Date().toLocaleDateString("ar-DZ");
+
+    // رسالة نجاح
+    document.getElementById("successMsg").style.display = "block";
+    document.getElementById("successMsg").innerHTML =
+      "✅ تم التسجيل بنجاح! رقمك: " + id;
+
+    // إظهار البطاقة
+    document.getElementById("cardContainer").style.display = "block";
+
+    document.getElementById("cardId").innerText = id;
+    document.getElementById("cardName").innerText = name;
+    document.getElementById("cardAge").innerText = age;
+    document.getElementById("cardPhone").innerText = phone;
+    document.getElementById("cardCourse").innerText = course;
+    document.getElementById("cardDate").innerText = today;
+
+    document.getElementById("form").reset();
+  })
+
+  .catch(err => {
+    console.log(err);
+    document.getElementById("successMsg").style.display = "block";
+    document.getElementById("successMsg").style.color = "red";
+    document.getElementById("successMsg").innerHTML =
+      "❌ حدث خطأ في التسجيل، حاول مرة أخرى";
+  });
+});
+</script>
+
+</body>
+</html>
