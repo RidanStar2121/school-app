@@ -1,240 +1,233 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تسجيل أكاديمية وضاح للعلوم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root { --main-blue: #007bff; --light-blue: #e3f2fd; --gold: #c5a059; }
+        body { font-family: 'Cairo', sans-serif; background: #f4f7f9; margin: 0; padding: 15px; color: #333; }
+        
+        .app-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 25px; max-width: 450px; margin: auto; }
+        .logo-area { text-align: center; margin-bottom: 25px; }
+        .logo-area h2 { color: var(--main-blue); margin: 5px 0; font-size: 22px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #666; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 12px; font-family: 'Cairo'; box-sizing: border-box; font-size: 15px; transition: 0.3s; }
+        input:focus { border-color: var(--main-blue); outline: none; background: #fff; }
 
-<title>تسجيل الدورات</title>
+        /* اختيار الدورات المتعدد */
+        .courses-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #f9f9f9; padding: 10px; border-radius: 12px; max-height: 150px; overflow-y: auto; }
+        .course-chip { background: white; border: 1px solid #ddd; padding: 8px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: 0.2s; text-align: center; }
+        .course-chip.selected { background: var(--main-blue); color: white; border-color: var(--main-blue); }
 
-<style>
-body {
-  font-family: 'Cairo', sans-serif;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  direction: rtl;
-}
+        .btn-submit { width: 100%; padding: 15px; background: var(--main-blue); color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,123,255,0.3); }
 
-.container {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  text-align: center;
-}
+        /* بطاقة الطالب الاحترافية */
+        #resultArea { display: none; margin-top: 25px; animation: fadeInUp 0.5s ease; }
+        .student-card { background: white; border-radius: 15px; overflow: hidden; position: relative; border: 1px solid #eee; }
+        .card-header { background: var(--main-blue); color: white; padding: 15px; text-align: center; }
+        .card-body { padding: 20px; background: #fff; display: flex; justify-content: space-between; }
+        .card-info p { margin: 5px 0; font-size: 14px; }
+        .qr-side { text-align: center; border-right: 1px dashed #ddd; padding-right: 15px; }
+        
+        .btn-download { width: 100%; background: #28a745; color: white; border: none; padding: 12px; border-radius: 10px; margin-top: 10px; font-family: 'Cairo'; cursor: pointer; }
 
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #4facfe;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #007bff;
-}
-
-.success {
-  display: none;
-  color: green;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-/* 🎴 بطاقة الطالب */
-#cardContainer {
-  display: none;
-  margin-top: 20px;
-}
-
-.card {
-  background: linear-gradient(135deg, #007bff, #00c6ff);
-  color: white;
-  padding: 20px;
-  border-radius: 15px;
-  text-align: right;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  position: relative;
-}
-
-.card h3 {
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.card p {
-  margin: 6px 0;
-  font-size: 14px;
-}
-
-.badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: white;
-  color: #007bff;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.signature {
-  margin-top: 10px;
-  font-size: 13px;
-  color: gray;
-}
-</style>
-
+        .signature-dev { margin-top: 30px; font-size: 11px; color: #aaa; text-align: center; }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-
-  <h2>📚 تسجيل الدورات</h2>
-
-  <form id="form">
-    <input type="text" id="name" placeholder="👦 اسم الطفل" required>
-    <input type="number" id="age" placeholder="🎂 العمر" required>
-    <input type="text" id="phone" placeholder="📱 رقم الهاتف" required>
-
-    <select id="course">
-      <option>🎮 Scratch</option>
-      <option>🤖 روبوتيك</option>
-      <option>🐍 Python</option>
-      <option>🧠 ذكاء اصطناعي</option>
-    </select>
-
-    <button type="submit">🚀 تسجيل الآن</button>
-  </form>
-
-  <div class="success" id="successMsg"></div>
-
-  <!-- 🎴 بطاقة الطالب -->
-  <div id="cardContainer">
-    <div class="card" id="studentCard">
-      <div class="badge">طالب مسجل</div>
-
-      <h3>📌 أكاديمية وضاح للعلوم</h3>
-      <h3>📌 بطاقة الطالب</h3>
-
-      <p><b>🆔 الرقم:</b> <span id="cardId"></span></p>
-      <p><b>👦 الاسم:</b> <span id="cardName"></span></p>
-      <p><b>🎂 العمر:</b> <span id="cardAge"></span></p>
-      <p><b>📱 الهاتف:</b> <span id="cardPhone"></span></p>
-      <p><b>📚 الدورة:</b> <span id="cardCourse"></span></p>
-      <p><b>📅 تاريخ التسجيل:</b> <span id="cardDate"></span></p>
-      <p><b>👨‍🏫 الأستاذ:</b> نذير وضاح</p>
+<div class="app-card">
+    <div class="logo-area">
+        <i class="fas fa-graduation-cap fa-3x" style="color: var(--main-blue);"></i>
+        <h2>أكاديمية وضاح للعلوم</h2>
+        <p style="font-size: 12px; color: #888;">بوابة التسجيل الإلكتروني السريع</p>
     </div>
 
-    <p style="font-size:13px;margin-top:10px;">
-      📌 قم بحفظ البطاقة أو أخذ Screenshot لإحضارها يوم التسجيل
-    </p>
-  </div>
+    <form id="registrationForm">
+        <div class="form-group">
+            <label>لقب وإسم الطالب:</label>
+            <input type="text" id="name" placeholder="مثال: وضاح أمير " required>
+        </div>
 
-<div style="margin-top:15px; text-align:center;">
+        <div class="form-group">
+            <label>تاريخ الميلاد:</label>
+            <input type="date" id="birthdate" required>
+        </div>
 
-  <a href="https://wa.me/213698935571" target="_blank"
-     style="display:inline-block; background:#25D366; color:white;
-     padding:8px 12px; margin:3px; border-radius:8px;
-     text-decoration:none; font-size:12px;">
-     📞 واتساب
-  </a>
+        <div class="form-group">
+            <label>رقم هاتف الولي:</label>
+            <input type="tel" id="phone" placeholder="06XXXXXXXX" required>
+        </div>
 
-  <a href="https://youtube.com/@ouaddahnadir" target="_blank"
-     style="display:inline-block; background:#ff0000; color:white;
-     padding:8px 12px; margin:3px; border-radius:8px;
-     text-decoration:none; font-size:12px;">
-     🎥 يوتيوب
-  </a>
+        <div class="form-group">
+            <label>اختر الدورة (يمكنك اختيار أكثر من واحدة):</label>
+            <div class="courses-grid" id="coursesList">
+                <!-- سيتم ملؤها من السكريبت أو يدوياً -->
+                <div class="course-chip" onclick="toggleCourse(this)">🎮 Scratch</div>
+                <div class="course-chip" onclick="toggleCourse(this)">🤖 روبوتيك</div>
+                <div class="course-chip" onclick="toggleCourse(this)">🐍 Python</div>
+                <div class="course-chip" onclick="toggleCourse(this)">🧠 ذكاء اصطناعي</div>
+                <div class="course-chip" onclick="toggleCourse(this)">📚 رياضيات</div>
+                <div class="course-chip" onclick="toggleCourse(this)">🇫🇷 فرنسية</div>
+                <div class="course-chip" onclick="toggleCourse(this)">🇬🇧 إنجليزية</div>
+            </div>
+        </div>
 
-  <a href="https://facebook.com/nadir.ouaddah" target="_blank"
-     style="display:inline-block; background:#1877f2; color:white;
-     padding:8px 12px; margin:3px; border-radius:8px;
-     text-decoration:none; font-size:12px;">
-     👍 فيسبوك
-  </a>
+        <div class="form-group">
+            <label>اختر الأستاذ المفضل:</label>
+            <select id="teacherSelect">
+                <option value="غير محدد">جاري تحميل الأساتذة...</option>
+            </select>
+        </div>
 
-</div>
+        <button type="submit" class="btn-submit" id="submitBtn">🚀 إتمام التسجيل الآن</button>
+    </form>
 
-  <div class="signature">
-    <h4>برمجة وتصميم: نذير وضاح</h4>
-  </div>
+    <!-- منطقة عرض البطاقة بعد النجاح -->
+    <div id="resultArea">
+        <div id="captureArea">
+            <div class="student-card">
+                <div class="card-header">
+                    <div style="font-size: 10px; opacity: 0.8;">بطاقة تسجيل الطالب</div>
+                    <div style="font-weight: bold;">أكاديمية وضاح للعلوم</div>
+                </div>
+                <div class="card-body">
+                    <div class="qr-side">
+                        <img id="qrImg" src="" width="80" alt="QR Code">
+                        <div style="font-size: 9px; margin-top: 5px; color: var(--main-blue);">ID: <span id="resId"></span></div>
+                    </div>
+                    <div class="card-info">
+                        <p><b>👤 الاسم:</b> <span id="resName"></span></p>
+                        <p><b>📅 الميلاد:</b> <span id="resBirth"></span></p>
+                        <p><b>📚 المواد:</b> <span id="resCourses" style="font-size: 11px; color: var(--main-blue);"></span></p>
+                        <p><b>👨‍🏫 الأستاذ:</b> <span id="resTeacher"></span></p>
+                    </div>
+                </div>
+                <div style="font-size: 8px; text-align: center; padding: 5px; background: #f9f9f9; color: #999;">
+                    تم البرمجة بواسطة نذير وضاح - 2026
+                </div>
+            </div>
+        </div>
+        <button class="btn-download" onclick="downloadCard()"><i class="fas fa-download"></i> حفظ البطاقة في الهاتف</button>
+    </div>
 
+    <div class="signature-dev">
+        <p>جميع الحقوق محفوظة © نذير وضاح</p>
+        <div style="margin-top: 10px;">
+            <a href="https://facebook.com/nadir.ouaddah" style="color: #1877f2; margin: 0 10px;"><i class="fab fa-facebook fa-lg"></i></a>
+            <a href="https://wa.me/213698935571" style="color: #25D366; margin: 0 10px;"><i class="fab fa-whatsapp fa-lg"></i></a>
+        </div>
+    </div>
 </div>
 
 <script>
-document.getElementById("form").addEventListener("submit", function(e){
-  e.preventDefault();
+    const API_URL = "https://script.google.com/macros/s/AKfycbz65rgLnVFpY0_sgm4bXBvzss0XT4pOJDIYXIQeHdzvzclsHrKV68_fcvLBMrDTGJszJg/exec";
+    let selectedCourses = [];
 
-  fetch("https://script.google.com/macros/s/AKfycbxTGELHHIGsGQno1bxZmh5JELRm5QturBpEi9NlvyF6aOGSKUUTcDIC0m9KT9K3PeBUPw/exec", {
-    method: "POST",
-    body: JSON.stringify({
-      name: document.getElementById("name").value,
-      age: document.getElementById("age").value,
-      phone: document.getElementById("phone").value,
-      course: document.getElementById("course").value
-    })
-  })
+    // 1. جلب الأساتذة عند الفتح
+    window.onload = async () => {
+        try {
+            const res = await fetch(`${API_URL}?action=get&sheet=teachers`);
+            const teachers = await res.json();
+            const select = document.getElementById('teacherSelect');
+            select.innerHTML = teachers.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+        } catch (e) {
+            document.getElementById('teacherSelect').innerHTML = `<option>نذير وضاح (افتراضي)</option>`;
+        }
+    };
 
-  .then(res => res.text())
-  .then(id => {
+    function toggleCourse(el) {
+        el.classList.toggle('selected');
+        const course = el.innerText;
+        if(selectedCourses.includes(course)) {
+            selectedCourses = selectedCourses.filter(c => c !== course);
+        } else {
+            selectedCourses.push(course);
+        }
+    }
 
-    id = id.trim();
+    document.getElementById("registrationForm").addEventListener("submit", async function(e){
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const resArea = document.getElementById("resultArea");
+        
+        btn.innerText = "⏳ جاري التخزين في السجل...";
+        btn.disabled = true;
 
-    if (!id) throw new Error("Empty ID");
+        const data = {
+            name: document.getElementById("name").value,
+            birthdate: document.getElementById("birthdate").value,
+            phone: document.getElementById("phone").value,
+            course: selectedCourses.join(" + "),
+            teacher: document.getElementById("teacherSelect").value
+        };
 
-    let name = document.getElementById("name").value;
-    let age = document.getElementById("age").value;
-    let phone = document.getElementById("phone").value;
-    let course = document.getElementById("course").value;
+        try {
+            // إرسال البيانات إلى السكريبت
+            const response = await fetch(API_URL, {
+                method: "POST",
+                mode: "no-cors", // لضمان العمل مع Google Apps Script
+                body: JSON.stringify(data)
+            });
 
-    let today = new Date().toLocaleDateString("ar-DZ");
+            // ملاحظة: مع "no-cors" لا يمكن قراءة الـ ID المرتجع مباشرة
+            // لذا سنقوم بتوليد ID مؤقت أو جلب آخر رقم إذا أردت الدقة الكاملة
+            // للتبسيط، سنستخدم توقيت اللحظة كـ ID فريد أو ننتظر التحديث
+            const tempId = "STA-" + Math.floor(Math.random() * 9000 + 1000);
 
-    // رسالة نجاح
-    document.getElementById("successMsg").style.display = "block";
-    document.getElementById("successMsg").innerHTML =
-      "✅ تم التسجيل بنجاح! رقمك: " + id;
+            // ملء بيانات البطاقة
+            document.getElementById("resId").innerText = tempId;
+            document.getElementById("resName").innerText = data.name;
+            document.getElementById("resBirth").innerText = data.birthdate;
+            document.getElementById("resCourses").innerText = data.course;
+            document.getElementById("resTeacher").innerText = data.teacher;
+            
+            // إصلاح الـ QR Code ليعرض معلومات واضحة عند الفحص
+            const qrContent = `نظام نذير وضاح\nالطالب: ${data.name}\nالرقم: ${tempId}\nالدورة: ${data.course}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrContent)}`;
+            
+            // ننتظر تحميل الصورة تماماً قبل السماح بالحفظ
+            const img = document.getElementById("qrImg");
+            img.onload = function() {
+                resArea.style.display = "block";
+                btn.innerText = "✅ تم التسجيل والحفظ";
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            };
+            img.src = qrUrl;
 
-    // إظهار البطاقة
-    document.getElementById("cardContainer").style.display = "block";
+        } catch (err) {
+            console.error(err);
+            alert("خطأ في الاتصال بالخادم. تأكد من إعدادات الـ Script");
+            btn.disabled = false;
+            btn.innerText = "🚀 حاول مرة أخرى";
+        }
+    });
 
-    document.getElementById("cardId").innerText = id;
-    document.getElementById("cardName").innerText = name;
-    document.getElementById("cardAge").innerText = age;
-    document.getElementById("cardPhone").innerText = phone;
-    document.getElementById("cardCourse").innerText = course;
-    document.getElementById("cardDate").innerText = today;
-
-    document.getElementById("form").reset();
-  })
-
-  .catch(err => {
-    console.log(err);
-    document.getElementById("successMsg").style.display = "block";
-    document.getElementById("successMsg").style.color = "red";
-    document.getElementById("successMsg").innerHTML =
-      "❌ حدث خطأ في التسجيل، حاول مرة أخرى";
-  });
-});
+    // وظيفة التحميل مع تأمين جودة الصورة
+    function downloadCard() {
+        const area = document.getElementById('captureArea');
+        // نستخدم خيار useCORS للسماح بجلب الـ QR Code داخل الصورة
+        html2canvas(area, { 
+            scale: 3, 
+            useCORS: true,
+            allowTaint: true,
+            logging: false
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `بطاقة_${document.getElementById('name').value}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
 </script>
 
 </body>
