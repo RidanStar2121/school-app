@@ -50,7 +50,47 @@
         <i class="fas fa-graduation-cap fa-3x" style="color: var(--main-blue);"></i>
         <h2>أكاديمية وضاح للعلوم</h2>
         <p style="font-size: 12px; color: #888;">بوابة التسجيل الإلكتروني السريع</p>
-        <h1><p style="font-size: 14px; color: #FF0000;">هام: بداية التسجيل بمقر الأكاديمية السبت 16 ماي 2026</p></h1>
+        <div class="moving-text-container">
+  <div class="moving-text-drop">
+    هام: بداية التسجيل بمقر الأكاديمية إبتداءا من السبت 16 ماي 2026
+  </div>
+</div>
+
+<style>
+.moving-text-container {
+  overflow: hidden;
+  height: 50px; /* تحكم في الارتفاع حسب الحاجة */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.moving-text-drop {
+  color: #FF0000; /* اللون الأحمر الصافي */
+  font-weight: bold;
+  font-size: 14px;
+  animation: dropIn 4s ease-in-out infinite;
+}
+
+@keyframes dropIn {
+  0% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}
+</style>
     </div>
 
     <form id="registrationForm">
@@ -123,9 +163,6 @@
 
 <!-- الأزرار بعد نجاح التسجيل -->
 <div style="display: flex; gap: 10px;">
-    <button class="btn-download" onclick="downloadCard()" style="flex: 2;">
-        <i class="fas fa-download"></i> حفظ البطاقة
-    </button>
     
     <button onclick="window.location.reload()" style="flex: 1; margin-top: 10px; background: #6c757d; color: white; border: none; border-radius: 10px; cursor: pointer; font-family: 'Cairo';">
         <i class="fas fa-redo"></i> جديد
